@@ -5,14 +5,19 @@ Simple search suggestions interface powered by redis and web.py
 import web
 import redis
 import json
-# Create a connection at runtime
-r = redis.StrictRedis(host='localhost', port=6379, db=0)
 from werkzeug.contrib.cache import MemcachedCache
-cache = MemcachedCache(['127.0.0.1:11211'])
+
 
 # SETTINGS
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
+MEMCACHE_ADDRESS = '127.0.0.1:11211'
 CACHE_DURATION = 86400 # To prevent the redis server being hammered with gets and sets, this stores the json result
+ALLOW_THIRD_PARTY_ACCESS = False # Set this to true if you are accessing suggestions from a different domain name via Javascript
 
+r = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
+cache = MemcachedCache([MEMCACHE_ADDRESS])
 
 urls = (
   '/suggestit/','home',
@@ -26,8 +31,6 @@ app = web.application(urls, globals())
 class home:
     def GET(self):
         return 'Suggestit search suggestion engine'
-
-
 
 class set:
     """
@@ -58,7 +61,8 @@ class get:
         result_list = []
         set_name = name['term'].lower()+':star'
         results = r.zrevrange(set_name,0,10)
-        web.header('Access-Control-Allow-Origin','*')        
+        if ALLOW_THIRD_PARTY_ACCESS:
+            web.header('Access-Control-Allow-Origin','*')        
         if 'term' in web.input():
             key = 'sug:'+web.url()+'?term='+web.input()['term']
             key = key.replace(' ','+')
