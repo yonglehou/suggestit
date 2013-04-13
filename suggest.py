@@ -13,7 +13,7 @@ REDIS_HOST = 'localhost'
 REDIS_PORT = 6379
 REDIS_DB = 0
 MEMCACHE_ADDRESS = '127.0.0.1:11211'
-CACHE_DURATION = 86400 # To prevent the redis server being hammered with gets and sets, this stores the json result
+CACHE_DURATION = 86400 # To prevent the redis server being hammered with gets, this stores the json result
 ALLOW_THIRD_PARTY_ACCESS = False # Set this to true if you are accessing suggestions from a different domain name via Javascript
 
 r = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
