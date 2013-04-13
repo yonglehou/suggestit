@@ -1,0 +1,5 @@
+Werkzeug==0.8.3
+python-memcached==1.48
+redis==2.7.2
+web.py==0.37
+wsgiref==0.1.2
