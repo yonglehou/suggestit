@@ -20,12 +20,14 @@ The /get/ endpoint can easily be used with [jQuery UI's autocomplete feature](ht
                      if(ui.item){
                          $(this).val(ui.item.value);
                      }
-
                      $(this).parents("form").submit();
                  }
- 
- 
  		});
  	});
 
 The suggestion engine returns results in JSON ranked by popularity.
+
+You can run it using:
+	python suggest.py
+
+In production however, it's best to run it through uWSGI or another WSGI server.
